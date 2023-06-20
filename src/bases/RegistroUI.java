@@ -147,9 +147,6 @@ public class RegistroUI extends javax.swing.JFrame {
         Agregar();
         
         setLocationRelativeTo(null);
-        MensajeExito ventanaMensaje = new MensajeExito();
-        ventanaMensaje.setVisible(true);
-        this.dispose();  
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -193,23 +190,53 @@ public class RegistroUI extends javax.swing.JFrame {
         String cedula = txtCedula.getText();
         String celular = txtCelular.getText();
         String direccionElectronica = txtEmail.getText();
-        
+
         int clave = Integer.parseInt(txtClave.getText());
         double saldoInicial = Double.parseDouble(txtSaldoInicial.getText());
+
+        if (nombre.isEmpty() || apellidos.isEmpty() || cedula.isEmpty() || celular.isEmpty() || direccionElectronica.isEmpty() || txtClave.getText().isEmpty() || txtSaldoInicial.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Faltan ingresar datos");
+            this.setVisible(true);
+            return; 
+        }
         
+        if (cedula.length() < 6) {
+            JOptionPane.showMessageDialog(null, "La cédula debe tener al menos 6 dígitos");
+            this.setVisible(true);
+            return; 
+        }
+
+        if (celular.length() != 10) {
+            JOptionPane.showMessageDialog(null, "El número de celular debe tener 10 dígitos");
+            this.setVisible(true);
+            return; 
+        }
+
+        String emailPattern = "[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}";
+        if (!direccionElectronica.matches(emailPattern)) {
+            JOptionPane.showMessageDialog(null, "Dirección de correo electrónico inválida");
+            return;
+        }
+        
+        if (txtClave.getText().length() != 4) {
+            JOptionPane.showMessageDialog(null, "La clave debe tener 4 dígitos");
+            this.setVisible(true);
+            return; 
+        }
+
         Usuario usuario = new Usuario(cedula, nombre, apellidos, celular, direccionElectronica, saldoInicial, clave);
-        
+
         boolean creacionExitosa = usuario.crearUsuario(nombre, apellidos, cedula, celular, direccionElectronica, clave, saldoInicial);
-        
+
         if(creacionExitosa == true){
             MensajeExito ventanaMensaje = new MensajeExito();
             ventanaMensaje.setVisible(true);
             this.dispose(); 
         }else{
-            JOptionPane.showMessageDialog(null, "Faltan ingresar datos");
+            JOptionPane.showMessageDialog(null, "Error al crear el usuario");
         }
-    }
-    
+}
+
         
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
