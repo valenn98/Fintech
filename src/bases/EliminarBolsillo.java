@@ -117,7 +117,7 @@ public class EliminarBolsillo extends javax.swing.JFrame {
         boolean datosCorrectos = bolsillo.verificarNombreBolsillo(nombreBolsillo);
         
         if(datosCorrectos){
-            eliminarBolsillo(nombreBolsillo);
+            eliminarBolsillo(nombreBolsillo, numero);
         }else {
             JOptionPane.showMessageDialog(null, "Los datos son incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -165,9 +165,9 @@ public class EliminarBolsillo extends javax.swing.JFrame {
         });
     }
     
-    private void eliminarBolsillo(String nombreBolsillo){
+    private void eliminarBolsillo(String nombreBolsillo, String numero){
         Bolsillo bolsillo = new Bolsillo();
-        int filasActualizadas = bolsillo.eliminarBolsillo(nombreBolsillo);
+        int filasActualizadas = bolsillo.eliminarBolsillo(nombreBolsillo, numero);
         
         try {
             

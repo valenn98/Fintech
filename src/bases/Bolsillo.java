@@ -197,24 +197,39 @@ public class Bolsillo {
         return filasActualizadas;
         
     }
-    
-    public int eliminarBolsillo(String nombreBolsillo){
+    public int eliminarBolsillo(String nombreBolsillo,String numero) {
         Bases bases = Bases.getInstancia();
         Connection conexion = bases.conectar();
         int filasAfectadas = 0;
-        
-         try {
+
+        try {
             Statement statement = conexion.createStatement();
-            String query = "DELETE FROM bolsillo WHERE NombreBolsillo = '" + nombreBolsillo+ "'";
-            filasAfectadas = statement.executeUpdate(query);
-            
+
+            // Consulta para obtener el saldo del bolsillo
+            String query2 = "SELECT SaldoDisponible FROM bolsillo WHERE NombreBolsillo = '" + nombreBolsillo + "'";
+            ResultSet resultSet = statement.executeQuery(query2);
+
+            double saldoBolsillo = 0.0;
+
+            if (resultSet.next()) {
+                saldoBolsillo = resultSet.getDouble("SaldoDisponible");
+            }
+
+            String query = "DELETE FROM bolsillo WHERE NombreBolsillo = '" + nombreBolsillo + "'";
+            int filasActualizadas1 = statement.executeUpdate(query);
+
+            // Consulta para actualizar el saldo en la tabla usuario
+            String query3 = "UPDATE usuario SET SaldoInicial = SaldoInicial + " + saldoBolsillo + " WHERE Celular = '" + numero + "'";
+            int filasActualizadas3 = statement.executeUpdate(query3);
+
+            filasAfectadas = filasActualizadas1 + filasActualizadas3;
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+
         return filasAfectadas;
     }
-    
-    
+
 }
 
    
